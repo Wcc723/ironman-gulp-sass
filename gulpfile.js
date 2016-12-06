@@ -40,7 +40,7 @@ gulp.task('others', function(){
 // });
 
 gulp.task('watch', function () {
-  gulp.watch('./sass/**/*.scss', ['sass']);
+  gulp.watch(path.source + 'scss/**/*.scss', ['sass']);
   gulp.watch(objs, ['others']);
 });
 
