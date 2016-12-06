@@ -4,6 +4,11 @@ var gulp = require('gulp'),
   plumber = require('gulp-plumber'),
   postcss = require('gulp-postcss');
 
+var async = require('async'),
+  iconfont = require('gulp-iconfont'),
+  consolidate = require('gulp-consolidate');
+
+
 var path = {
   source: './source/',
   public: './public/'
@@ -22,6 +27,33 @@ gulp.task('sass', function () {
     .pipe(gulp.dest(path.public + 'stylesheets'));
 });
 
+// icon fonts
+gulp.task('iconfonts', function(done){
+  var iconStream = gulp.src([path.source + 'icons/*.svg'])
+    .pipe(iconfont({ fontName: 'icon' }));
+
+  async.parallel([
+    function handleGlyphs (cb) {
+      iconStream.on('glyphs', function(glyphs, options) {
+        gulp.src(path.source + 'css_template/iconfonts.css')
+          .pipe(consolidate('lodash', {
+            glyphs: glyphs,
+            fontName: 'icon',
+            fontPath: '../fonts/', 
+            className: 'all-my-class'
+          }))
+          .pipe(gulp.dest(path.public + 'stylesheets'))
+          .on('finish', cb);
+      });
+    },
+    function handleFonts (cb) {
+      iconStream
+        .pipe(gulp.dest(path.public + 'fonts/'))
+        .on('finish', cb);
+    }
+  ], done);
+});
+
 // 其它不編譯的物件
 var objs = ['./source/**/**.*'];
 var others = [
@@ -35,13 +67,11 @@ gulp.task('others', function(){
     .pipe(plumber())
     .pipe(gulp.dest(path.public));
 });
-// watch(objs, function() {
-//   gulp.start('others');
-// });
 
 gulp.task('watch', function () {
-  gulp.watch('./sass/**/*.scss', ['sass']);
+  gulp.watch(path.source + 'scss/**/*.scss', ['sass']);
+  gulp.watch(path.source + 'icons/*.svg', ['iconfonts']);
   gulp.watch(objs, ['others']);
 });
 
-gulp.task('default', ['others', 'sass', 'watch']);
+gulp.task('default', ['others', 'sass', 'iconfonts', 'watch']);
