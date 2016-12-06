@@ -7,7 +7,8 @@ var gulp = require('gulp'),
 var async = require('async'),
   iconfont = require('gulp-iconfont'),
   consolidate = require('gulp-consolidate');
-
+  
+var webserver = require('gulp-webserver');
 
 var path = {
   source: './source/',
@@ -39,7 +40,7 @@ gulp.task('iconfonts', function(done){
           .pipe(consolidate('lodash', {
             glyphs: glyphs,
             fontName: 'icon',
-            fontPath: '../fonts/', 
+            fontPath: '../fonts/',
             className: 'all-my-class'
           }))
           .pipe(gulp.dest(path.public + 'stylesheets'))
@@ -74,4 +75,17 @@ gulp.task('watch', function () {
   gulp.watch(objs, ['others']);
 });
 
-gulp.task('default', ['others', 'sass', 'iconfonts', 'watch']);
+// webserver
+gulp.task('webserver', function() {
+  setTimeout(function(){
+    gulp.src(path.public)
+      .pipe(webserver({
+        livereload: true,
+        open: false,
+        host: '0.0.0.0',
+        port: 10000,
+      }));
+  }, 1000);
+});
+
+gulp.task('default', ['others', 'sass', 'iconfonts', 'watch', 'webserver']);
