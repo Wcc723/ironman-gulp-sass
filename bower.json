@@ -1,0 +1,22 @@
+{
+  "name": "gulp-sass",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Wcc723 <agito723@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Wcc723/ironman-gulp-sass",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bower": "*",
+    "install": "^1.0.4",
+    "bootstrap-sass": "^3.3.7"
+  }
+}
