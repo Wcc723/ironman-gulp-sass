@@ -7,12 +7,13 @@ var gulp = require('gulp'),
 var async = require('async'),
   iconfont = require('gulp-iconfont'),
   consolidate = require('gulp-consolidate');
-  
+
 var webserver = require('gulp-webserver');
 
 var path = {
   source: './source/',
-  public: './public/'
+  public: './public/',
+  bower: './bower_components/'
 }
 
 gulp.task('sass', function () {
@@ -22,7 +23,8 @@ gulp.task('sass', function () {
   return gulp.src(path.source + 'scss/**/*.scss')
     .pipe(plumber())
     .pipe(sass(
-      {outputStyle: 'expanded'}
+      {outputStyle: 'expanded',
+      includePaths: [path.bower + 'bootstrap-sass/assets/stylesheets']}
     ).on('error', sass.logError))
     .pipe(postcss(processors))
     .pipe(gulp.dest(path.public + 'stylesheets'));
