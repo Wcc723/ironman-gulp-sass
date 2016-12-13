@@ -15,8 +15,6 @@
     "tests"
   ],
   "dependencies": {
-    "bower": "*",
-    "install": "^1.0.4",
     "bootstrap-sass": "^3.3.7"
   }
 }
